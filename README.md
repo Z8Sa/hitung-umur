@@ -13,7 +13,7 @@ Proyek ini tersedia dalam dua versi:
 
 GitHub Repository:
 
-**https://github.com/Z8Sa/hitung-umur**
+**https://z8sa.github.io/hitung-umur/**
 
 ---
 
