@@ -117,12 +117,12 @@ Atau gunakan VS Code:
 ## 📊 Contoh Output
 
 ```text
-Tanggal Lahir : 2007-08-15
+Tanggal Lahir : 2008-08-7
 Hari Lahir    : Wednesday
 Hari Ini      : Monday
 
-Umur dalam Hari  : 6880 Hari
-Umur dalam Tahun : 18 Tahun
+Umur dalam Hari  : 6521 hari
+Umur dalam Tahun : 17 Tahun
 ```
 
 ---
