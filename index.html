@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kalkulator Usia</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Courier New', 'Consolas', monospace;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            width: 100%;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.98);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .title {
+            text-align: center;
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #333;
+            font-size: 14px;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 16px;
+            font-family: 'Courier New', monospace;
+            transition: all 0.3s;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            font-family: 'Courier New', monospace;
+            transition: all 0.3s;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .loading {
+            text-align: center;
+            margin-top: 20px;
+            display: none;
+        }
+
+        .loading.show {
+            display: block;
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .error {
+            background: #fee;
+            color: #c33;
+            padding: 12px;
+            border-radius: 10px;
+            margin-top: 15px;
+            display: none;
+            border-left: 4px solid #c33;
+            font-weight: bold;
+        }
+
+        .error.show {
+            display: block;
+            animation: shake 0.3s ease-out;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        .output {
+            margin-top: 25px;
+            display: none;
+        }
+
+        .output.show {
+            display: block;
+            animation: slideUp 0.5s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Terminal Styling */
+        .terminal {
+            background: #0a0e27;
+            border-radius: 10px;
+            padding: 20px;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            line-height: 1.5;
+            color: #fff;
+        }
+
+        .terminal .box {
+            margin-bottom: 15px;
+        }
+
+        .terminal .text-blue { color: #3b82f6; }
+        .terminal .text-green { color: #22c55e; }
+        .terminal .text-cyan { color: #06b6d4; }
+        .terminal .text-yellow { color: #eab308; }
+        .terminal .text-pink { color: #ec4899; }
+        .terminal .text-white { color: #ffffff; }
+        .terminal .font-bold { font-weight: bold; }
+
+        hr {
+            margin: 15px 0;
+            border: none;
+            border-top: 1px solid #334;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <div class="title">
+                🎂 Kalkulator Usia 🎂
+            </div>
+
+            <div class="form-group">
+                <label>📅 Tanggal Lahir (1-31)</label>
+                <input type="number" id="tanggal" placeholder="Contoh: 15" min="1" max="31">
+            </div>
+
+            <div class="form-group">
+                <label>📆 Bulan Lahir (1-12)</label>
+                <input type="number" id="bulan" placeholder="Contoh: 8" min="1" max="12">
+            </div>
+
+            <div class="form-group">
+                <label>📅 Tahun Lahir</label>
+                <input type="number" id="tahun" placeholder="Contoh: 1990" min="1900" max="2026">
+            </div>
+
+            <button id="hitungBtn">✨ Hitung Umur ✨</button>
+
+            <div class="loading" id="loading">
+                <div class="spinner"></div>
+                <p style="margin-top: 10px;">Menghitung...</p>
+            </div>
+
+            <div class="error" id="error"></div>
+
+            <div class="output" id="output">
+                <div class="terminal" id="result"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Nama bulan dalam Bahasa Indonesia
+        const namaBulan = [
+            "Januari", "Februari", "Maret", "April", "Mei", "Juni",
+            "Juli", "Agustus", "September", "Oktober", "November", "Desember"
+        ];
+        
+        // Nama hari dalam Bahasa Indonesia
+        const namaHari = [
+            "Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"
+        ];
+
+        function formatOutput(tanggal, bulan, tahun, tanggalLahir, hariIni, umurHari, umurTahun) {
+            const bulanNama = namaBulan[bulan - 1];
+            const hariLahir = namaHari[tanggalLahir.getDay()];
+            const hariIniNama = namaHari[hariIni.getDay()];
+            const tanggalHariIni = `${hariIni.getFullYear()}-${String(hariIni.getMonth() + 1).padStart(2, '0')}-${String(hariIni.getDate()).padStart(2, '0')}`;
+            
+            const komen = "---------- DATA ANDA ----------";
+            const garis = "═".repeat(38);
+            const garisPanjang = "═".repeat(58);
+            
+            return `
+                <div class="box">
+                    <span class="text-blue font-bold">
+╔${garis}╗                                                                              <br>
+║                DATA                                                                   <br>
+╠${garis}╣                                                                              <br>
+║  ➤ Tanggal Lahir: ${String(tanggal).padEnd(19)}                                      <br>
+║  ➤ Bulan Lahir:   ${String(bulan).padEnd(19)}                                        <br>
+║  ➤ Tahun Lahir:   ${String(tahun).padEnd(19)}                                        <br>
+║                                                                                       <br>
+║  <span class="text-green">${komen.padEnd(36)}</span><span class="text-blue"></span>   <br>
+╚${garis}╝
+                    </span>
+                </div>
+                
+                <div class="box">
+                    <span class="text-cyan">tanggal lahir anda adalah : ${tanggalLahir.getFullYear()}-${String(tanggalLahir.getMonth() + 1).padStart(2, '0')}-${String(tanggalLahir.getDate()).padStart(2, '0')}</span>
+                </div>
+                
+                <div class="box">
+                    <span class="text-pink font-bold">
+╔${garisPanjang}╗<br>
+║                    INFORMASI UMUR ANDA<br>
+╠${garisPanjang}╣<br>
+<span class="text-cyan">║  📅 Bulan Lahir     : <span class="text-yellow">${bulanNama.padEnd(35)}</span><span class="text-cyan"></span><br>
+<span class="text-cyan">║  📆 Hari Lahir      : <span class="text-yellow">${hariLahir.padEnd(35)}</span><span class="text-cyan"></span><br>
+<span class="text-cyan">║  📆 Hari Ini        : <span class="text-yellow">${hariIniNama}, ${tanggalHariIni.padEnd(27)}</span><span class="text-cyan"></span><br>
+╠${garisPanjang}╣<br>
+<span class="text-cyan">║  ⏳ Umur dalam Hari  : <span class="text-green">${umurHari} Hari${" ".repeat(29 - String(umurHari).length)}</span><span class="text-cyan"></span><br>
+<span class="text-cyan">║  🎂 Umur dalam Tahun : <span class="text-green">${umurTahun} tahun${" ".repeat(31 - String(umurTahun).length)}</span><span class="text-cyan"></span><br>
+╠${garisPanjang}╣<br>
+<span class="text-cyan">║  <span class="text-white font-bold">✨ Selamat! Anda sudah berusia ${umurTahun} tahun! ✨${" ".repeat(21)}</span><span class="text-cyan"></span><br>
+<span class="text-pink">╚${garisPanjang}╝</span>
+                    </span>
+                </div>
+            `;
+        }
+
+        function hitungUmur() {
+            // Reset error dan loading
+            const errorDiv = document.getElementById('error');
+            errorDiv.classList.remove('show');
+            errorDiv.innerHTML = '';
+            
+            const loadingDiv = document.getElementById('loading');
+            loadingDiv.classList.add('show');
+            
+            const outputDiv = document.getElementById('output');
+            outputDiv.classList.remove('show');
+            
+            setTimeout(() => {
+                try {
+                    // Ambil nilai input
+                    const tanggal = parseInt(document.getElementById('tanggal').value);
+                    const bulan = parseInt(document.getElementById('bulan').value);
+                    const tahun = parseInt(document.getElementById('tahun').value);
+                    
+                    // Validasi input kosong
+                    if (isNaN(tanggal) || isNaN(bulan) || isNaN(tahun)) {
+                        throw new Error('Semua field harus diisi!');
+                    }
+                    
+                    // Validasi rentang
+                    if (tanggal < 1 || tanggal > 31) {
+                        throw new Error('Tanggal harus antara 1-31');
+                    }
+                    if (bulan < 1 || bulan > 12) {
+                        throw new Error('Bulan harus antara 1-12');
+                    }
+                    if (tahun < 1900 || tahun > 2026) {
+                        throw new Error('Tahun harus antara 1900-tahun sekarang');
+                    }
+                    
+                    // Buat objek tanggal
+                    const tanggalLahir = new Date(tahun, bulan - 1, tanggal);
+                    const hariIni = new Date();
+                    
+                    // Validasi tanggal valid
+                    if (tanggalLahir.getDate() !== tanggal || 
+                        tanggalLahir.getMonth() !== bulan - 1 || 
+                        tanggalLahir.getFullYear() !== tahun) {
+                        throw new Error('Tanggal tidak valid! Contoh: 31 April itu tidak ada');
+                    }
+                    
+                    // Validasi tidak melebihi hari ini
+                    if (tanggalLahir > hariIni) {
+                        throw new Error('Tanggal lahir tidak boleh melebihi hari ini!');
+                    }
+                    
+                    // Hitung umur
+                    const selisihMs = hariIni - tanggalLahir;
+                    const umurHari = Math.floor(selisihMs / (1000 * 60 * 60 * 24));
+                    const umurTahun = Math.floor(umurHari / 365.25);
+                    
+                    // Format output
+                    const outputText = formatOutput(tanggal, bulan, tahun, tanggalLahir, hariIni, umurHari, umurTahun);
+                    
+                    // Tampilkan hasil
+                    document.getElementById('result').innerHTML = outputText;
+                    outputDiv.classList.add('show');
+                    
+                } catch (err) {
+                    errorDiv.innerHTML = `⚠️ ${err.message}`;
+                    errorDiv.classList.add('show');
+                } finally {
+                    loadingDiv.classList.remove('show');
+                }
+            }, 300);
+        }
+
+        // Event listener untuk tombol
+        document.getElementById('hitungBtn').addEventListener('click', hitungUmur);
+        
+        // Event listener untuk Enter key
+        const inputs = ['tanggal', 'bulan', 'tahun'];
+        inputs.forEach(id => {
+            document.getElementById(id).addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') hitungUmur();
+            });
+        });
+    </script>
+</body>
+</html>
