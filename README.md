@@ -1,6 +1,6 @@
 # 🎂 Hitung Umur
 
-Aplikasi sederhana untuk menghitung umur berdasarkan tanggal lahir menggunakan **Python** dan **HTML/CSS/JavaScript**.
+Script sederhana untuk menghitung umur berdasarkan tanggal lahir menggunakan **Python** dan **HTML/CSS/JavaScript**.
 
 Proyek ini tersedia dalam dua versi:
 
