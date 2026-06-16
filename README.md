@@ -141,7 +141,7 @@ Project ini dibuat untuk:
 
 ## 👨‍💻 Author
 
-**Ares**
+**Rafi**
 
 Backend Developer & AI Automation Builder
 
